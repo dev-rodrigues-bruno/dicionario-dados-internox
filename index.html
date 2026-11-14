@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dicionário de Dados Internox</title>
+  <meta name="description" content="Dicionário de dados do sistema de controle de estoque e rastreabilidade de peças da Internox Aços e Tubos Ltda.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('tema'); } catch (e) {}
+      if (!t) { t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro'; }
+      document.documentElement.setAttribute('data-tema', t);
+    })();
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <button class="btn-icone" id="btnMenu" aria-label="Abrir menu de tabelas" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="marca">
+      <span class="marca-logo" aria-hidden="true">IX</span>
+      <div>
+        <h1>Dicionário de Dados</h1>
+        <p>Internox Aços e Tubos Ltda. &middot; Controle de Estoque e Rastreabilidade de Peças</p>
+      </div>
+    </div>
+    <button class="btn-tema" id="btnTema" aria-label="Alternar tema claro e escuro">
+      <svg class="ico-sol" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="ico-lua" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+      <span id="txtTema">Tema escuro</span>
+    </button>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar" aria-label="Tabelas do sistema">
+      <nav>
+        <p class="nav-titulo">Visão geral</p>
+        <ul>
+          <li><a href="#identificacao" data-alvo="identificacao">Identificação</a></li>
+          <li><a href="#governanca" data-alvo="governanca">Governança e legenda</a></li>
+        </ul>
+        <p class="nav-titulo">Tabelas (7)</p>
+        <ul id="navTabelas">
+          <li><a href="#tabela_tipo_peca" data-alvo="tabela_tipo_peca"><code>tipo_peca</code><span class="cnt">7</span></a></li>
+          <li><a href="#tabela_corrida" data-alvo="tabela_corrida"><code>corrida</code><span class="cnt">7</span></a></li>
+          <li><a href="#tabela_sequencia_corridaqg" data-alvo="tabela_sequencia_corridaqg"><code>sequencia_corridaqg</code><span class="cnt">5</span></a></li>
+          <li><a href="#tabela_usuario" data-alvo="tabela_usuario"><code>usuario</code><span class="cnt">14</span></a></li>
+          <li><a href="#tabela_peca" data-alvo="tabela_peca"><code>peca</code><span class="cnt">16</span></a></li>
+          <li><a href="#tabela_movimento" data-alvo="tabela_movimento"><code>movimento</code><span class="cnt">16</span></a></li>
+          <li><a href="#tabela_log_auditoria" data-alvo="tabela_log_auditoria"><code>log_auditoria</code><span class="cnt">9</span></a></li>
+        </ul>
+        <p class="nav-titulo">Banco</p>
+        <ul>
+          <li><a href="#objetos" data-alvo="objetos">Views, procedures e gatilhos</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="overlay" id="overlay" hidden></div>
+
+    <main class="conteudo" id="conteudo">
+      <section class="cartao" id="identificacao">
+        <h2>Identificação do projeto</h2>
+        <div class="ident-grid">
+          <div class="ident-bloco ident-escopo">
+            <h3>Escopo</h3>
+            <p>Banco de dados que controla o estoque de flanges, curvas e tubos da Internox Aços e Tubos Ltda. e garante a rastreabilidade de cada peça pelo código corridaQG, que a liga à corrida de produção de onde veio o aço. Cobre o cadastro de tipos, corridas e peças, as entradas e saídas com efetivação e estorno, os relatórios de saldo e giro, o controle de acesso por perfil, a trilha de auditoria e os direitos do titular previstos na LGPD. Ficam fora do escopo: emissão de nota fiscal, compras, financeiro e integração com o ERP.</p>
+          </div>
+          <div class="ident-bloco">
+            <h3>Tecnologia</h3>
+            <dl>
+              <dt>SGBD</dt><dd>MySQL 8.0.35 ou superior (InnoDB)</dd>
+              <dt>Codificação</dt><dd>utf8mb4, collation utf8mb4_0900_ai_ci</dd>
+              <dt>Banco</dt><dd><code>estoque_pecas</code></dd>
+              <dt>Script</dt><dd>estoque_pecas_completo.sql, versão 2.2</dd>
+              <dt>Documentação</dt><dd>Especificação de Requisitos v2.2, Prof. Dr. Diego Carvalho</dd>
+            </dl>
+          </div>
+          <div class="ident-bloco ident-resp">
+            <h3>Responsáveis</h3>
+            <table class="resp">
+              <thead><tr><th>Integrante</th><th>Papel</th><th>Governança</th><th>Responsabilidade</th></tr></thead>
+              <tbody>
+                <tr><td>Bruno Rodrigues</td><td>Analista de Requisitos (líder)</td><td><span class="papel owner">Data Owner</span></td><td>Responde pelas regras de negócio, pelos requisitos e pelas prioridades.</td></tr>
+                <tr><td>Nicollas Guedes Da Silva Santos</td><td>Arquiteto de Banco de Dados</td><td><span class="papel owner">Data Owner</span></td><td>Responde pela arquitetura, segurança, perfis de acesso e índices.</td></tr>
+                <tr><td>Denner de Paula</td><td>Modelador de Dados</td><td><span class="papel steward">Data Steward</span></td><td>Cuida do modelo, da nomenclatura e deste dicionário.</td></tr>
+                <tr><td>João Vitor Pires Ribeiro</td><td>Auditor / QA</td><td><span class="papel steward">Data Steward</span></td><td>Cuida da qualidade técnica, da consistência entre os documentos e da trilha de auditoria.</td></tr>
+              </tbody>
+            </table>
+            <p class="nota">UNICID &middot; Análise e Desenvolvimento de Sistemas &middot; Grupo 04 &middot; Professor orientador: Prof. Dr. Diego Carvalho</p>
+          </div>
+        </div>
+        <div class="numeros">
+          <div><strong>7</strong><span>tabelas</span></div>
+          <div><strong>74</strong><span>colunas</span></div>
+          <div><strong>7</strong><span>chaves estrangeiras</span></div>
+          <div><strong>11</strong><span>restrições CHECK</span></div>
+        </div>
+      </section>
+
+      <section class="painel" aria-label="Painel de controle">
+        <div class="painel-acoes">
+          <a class="btn btn-primario" href="docs/Especificacao_Requisitos_Regras_Negocio_BD.pdf" download>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Baixar Especificação de Requisitos (PDF)
+          </a>
+          <button class="btn btn-secundario" id="btnDer" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="7" height="6" rx="1" stroke="currentColor" stroke-width="2" fill="none"/><rect x="14" y="15" width="7" height="6" rx="1" stroke="currentColor" stroke-width="2" fill="none"/><path d="M6.5 9v4.5h11V15" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            Abrir DER
+          </button>
+        </div>
+        <div class="busca">
+          <label for="busca" class="sr-only">Pesquisar tabela ou coluna</label>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="search" id="busca" placeholder="Pesquisar tabela ou coluna (ex.: corridaqg, email, movimento)" autocomplete="off">
+          <span class="busca-res" id="buscaRes" aria-live="polite"></span>
+        </div>
+      </section>
+
+      <section class="cartao" id="governanca">
+        <h2>Governança de dados</h2>
+        <p class="literacy">Este dicionário é a fonte única de significado dos dados da Internox. Segundo o DAMA-DMBOK, metadados documentados são o que permite que almoxarifes, gerentes, auditores e desenvolvedores leiam o mesmo dado da mesma forma. Segundo o COBIT, eles sustentam o controle sobre quem acessa, altera e responde por cada informação. Para uma siderúrgica, isso significa provar a origem de cada peça pelo corridaQG diante de um cliente ou de uma auditoria de qualidade, confiar no saldo em estoque e tratar os dados pessoais dos colaboradores conforme a LGPD.</p>
+        <div class="legenda">
+          <div><span class="badge dps">[DPS]</span> Dado pessoal sensível (LGPD, art. 5º, II). Nenhuma coluna deste banco guarda dado sensível.</div>
+          <div><span class="badge dp">[DP]</span> Dado pessoal (LGPD, art. 5º, I): identifica uma pessoa direta ou indiretamente.</div>
+          <div><span class="badge na">[N/A]</span> Não aplicável: dado técnico ou de negócio, sem pessoa identificável.</div>
+        </div>
+        <p class="nota"><strong>Perfis da aplicação</strong> (função <code>fn_pode</code>): ALMOXARIFE, GERENTE, ADMIN e AUDITOR. <strong>Papéis do banco</strong>: <code>internox_app</code> (SELECT, INSERT, UPDATE, EXECUTE), <code>internox_relatorio</code> (SELECT) e <code>internox_admin</code> (ALL). Nenhum papel consegue excluir movimentos ou registros de auditoria, porque gatilhos bloqueiam a operação.</p>
+      </section>
+
+      <div class="sem-resultado" id="semResultado" hidden>Nenhuma tabela ou coluna encontrada para esta pesquisa.</div>
+
+      <section class="tabela" id="tabela_tipo_peca" data-nome="tipo_peca">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>tipo_peca</code></h2>
+            <p class="subtitulo">Tipos de peça</p>
+          </div>
+          <div class="chips">
+            <span class="chip">7 colunas</span>
+            <span class="chip">0 FK</span>
+            <span class="chip">0 CHECK</span>
+            <span class="chip ">0 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Catálogo dos tipos de peça fabricados pela Internox. Cada tipo pertence a uma família (flange, curva ou tubo) e define quais atributos técnicos a peça exige.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF01, RF10, RN02, RN05, RN15</p></div>
+          <div><h3>Relacionamentos</h3><ul><li>Referenciada por <a href="#tabela_peca">peca.id_tipo_peca</a></li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Leitura: todos os perfis (CONSULTAR). Cadastro e alteração: GERENTE e ADMIN, pela sp_cadastrar_tipo_peca (CADASTRAR_TIPO_CORRIDA). Papéis de banco: internox_app e internox_admin escrevem; internox_relatorio só lê.</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="tipo_peca id_tipo_peca identificador do tipo de peça.">
+            <td class="attr"><code>id_tipo_peca</code></td>
+            <td>Identificador do tipo de peça.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: peca.id_tipo_peca e log_auditoria.id_registro_afetado.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="tipo_peca nome nome comercial do tipo (ex.: flange cego). único no catálogo (rn02).">
+            <td class="attr"><code>nome</code></td>
+            <td>Nome comercial do tipo (ex.: Flange cego). Único no catálogo (RN02).</td>
+            <td class="tipo"><code>VARCHAR(50)</code></td>
+            <td class="cons">NOT NULL<br><strong>[UNIQUE]</strong></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: cadastro na sp_cadastrar_tipo_peca. Destino: vw_peca_completa e relatórios.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="tipo_peca categoria subclassificação dentro da família (ex.: cego, raio longo, sem costura).">
+            <td class="attr"><code>categoria</code></td>
+            <td>Subclassificação dentro da família (ex.: Cego, Raio longo, Sem costura).</td>
+            <td class="tipo"><code>VARCHAR(50)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: cadastro na sp_cadastrar_tipo_peca. Destino: vw_peca_completa e relatório de saldo por especificação (RF11).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="tipo_peca familia família da peça. define a regra de comprimento: obrigatório para tubo e proibido para flange e curva (rn05).">
+            <td class="attr"><code>familia</code></td>
+            <td>Família da peça. Define a regra de comprimento: obrigatório para TUBO e proibido para FLANGE e CURVA (RN05).</td>
+            <td class="tipo"><code>ENUM(&#x27;FLANGE&#x27;,<wbr>&#x27;CURVA&#x27;,<wbr>&#x27;TUBO&#x27;)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: cadastro na sp_cadastrar_tipo_peca. Destino: gatilhos trg_peca_bi e trg_peca_bu, vw_estoque_atual.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="tipo_peca ativo exclusão lógica. false retira o tipo dos novos cadastros sem apagar o histórico (rn15).">
+            <td class="attr"><code>ativo</code></td>
+            <td>Exclusão lógica. FALSE retira o tipo dos novos cadastros sem apagar o histórico (RN15).</td>
+            <td class="tipo"><code>BOOLEAN</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT TRUE</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: valor padrão TRUE; alterado pelo ADMIN. Destino: filtros das consultas.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="tipo_peca created_at data e hora de criação do registro.">
+            <td class="attr"><code>created_at</code></td>
+            <td>Data e hora de criação do registro.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="tipo_peca updated_at data e hora da última alteração.">
+            <td class="attr"><code>updated_at</code></td>
+            <td>Data e hora da última alteração.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: ON UPDATE CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tabela" id="tabela_corrida" data-nome="corrida">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>corrida</code></h2>
+            <p class="subtitulo">Corridas de produção</p>
+          </div>
+          <div class="chips">
+            <span class="chip">7 colunas</span>
+            <span class="chip">0 FK</span>
+            <span class="chip">0 CHECK</span>
+            <span class="chip ">0 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Cada corrida é um lote de aço produzido na aciaria. É a origem da rastreabilidade: toda peça aponta para a corrida de onde saiu o material.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF02, RF09, RN02, RN03, RN15</p></div>
+          <div><h3>Relacionamentos</h3><ul><li>Referenciada por <a href="#tabela_peca">peca.id_corrida</a></li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Leitura: todos os perfis (CONSULTAR). Cadastro: GERENTE e ADMIN, pela sp_cadastrar_corrida (CADASTRAR_TIPO_CORRIDA). Papéis de banco: internox_app e internox_admin escrevem; internox_relatorio só lê.</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="corrida id_corrida identificador da corrida.">
+            <td class="attr"><code>id_corrida</code></td>
+            <td>Identificador da corrida.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: peca.id_corrida.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="corrida numero_corrida número da corrida impresso no certificado de qualidade. único (rn02).">
+            <td class="attr"><code>numero_corrida</code></td>
+            <td>Número da corrida impresso no certificado de qualidade. Único (RN02).</td>
+            <td class="tipo"><code>VARCHAR(30)</code></td>
+            <td class="cons">NOT NULL<br><strong>[UNIQUE]</strong></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: certificado da aciaria, digitado na sp_cadastrar_corrida. Destino: buscar, vw_peca_completa e rastreio (RF09).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="corrida data_producao data em que a corrida foi produzida.">
+            <td class="attr"><code>data_producao</code></td>
+            <td>Data em que a corrida foi produzida.</td>
+            <td class="tipo"><code>DATE</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: certificado da aciaria. Destino: rastreio e relatórios.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="corrida observacao observação livre sobre a corrida. opcional.">
+            <td class="attr"><code>observacao</code></td>
+            <td>Observação livre sobre a corrida. Opcional.</td>
+            <td class="tipo"><code>VARCHAR(200)</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: cadastro. Destino: consulta da corrida.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="corrida ativo exclusão lógica (rn15).">
+            <td class="attr"><code>ativo</code></td>
+            <td>Exclusão lógica (RN15).</td>
+            <td class="tipo"><code>BOOLEAN</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT TRUE</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: padrão TRUE. Destino: filtros das consultas.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="corrida created_at data e hora de criação do registro.">
+            <td class="attr"><code>created_at</code></td>
+            <td>Data e hora de criação do registro.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="corrida updated_at data e hora da última alteração.">
+            <td class="attr"><code>updated_at</code></td>
+            <td>Data e hora da última alteração.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: ON UPDATE CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tabela" id="tabela_sequencia_corridaqg" data-nome="sequencia_corridaqg">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>sequencia_corridaqg</code></h2>
+            <p class="subtitulo">Sequência do corridaQG</p>
+          </div>
+          <div class="chips">
+            <span class="chip">5 colunas</span>
+            <span class="chip">0 FK</span>
+            <span class="chip">1 CHECK</span>
+            <span class="chip ">0 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Contador que gera o próximo código corridaQG de forma atômica (SELECT ... FOR UPDATE), sem repetição mesmo com cadastros simultâneos. Não tem relacionamento no DER.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF03, RN01</p></div>
+          <div><h3>Relacionamentos</h3><ul><li>Sem relacionamentos (tabela de apoio).</li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Nenhum perfil acessa diretamente. Lida e atualizada só pela sp_proximo_corridaqg, chamada dentro da sp_cadastrar_peca. Papel internox_admin para manutenção.</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="sequencia_corridaqg id_sequencia_corridaqg identificador da sequência.">
+            <td class="attr"><code>id_sequencia_corridaqg</code></td>
+            <td>Identificador da sequência.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: uso interno.</td>
+            <td class="rbac">Nenhum perfil acessa. Só a sp_proximo_corridaqg lê e grava.</td>
+          </tr>
+          <tr data-busca="sequencia_corridaqg nome nome da sequência (a carga inicial cria global, começando em 1000). único.">
+            <td class="attr"><code>nome</code></td>
+            <td>Nome da sequência (a carga inicial cria GLOBAL, começando em 1000). Único.</td>
+            <td class="tipo"><code>VARCHAR(50)</code></td>
+            <td class="cons">NOT NULL<br><strong>[UNIQUE]</strong></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: carga inicial do script. Destino: sp_proximo_corridaqg.</td>
+            <td class="rbac">Nenhum perfil acessa. Só a sp_proximo_corridaqg lê e grava.</td>
+          </tr>
+          <tr data-busca="sequencia_corridaqg ultimo_valor último corridaqg emitido. nunca negativo.">
+            <td class="attr"><code>ultimo_valor</code></td>
+            <td>Último corridaQG emitido. Nunca negativo.</td>
+            <td class="tipo"><code>BIGINT</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT 0<br><span class="chk" title="ultimo_valor &gt;= 0">CHECK chk_sequencia_ultimo_valor</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: sp_proximo_corridaqg (incremento). Destino: peca.corridaqg.</td>
+            <td class="rbac">Nenhum perfil acessa. Só a sp_proximo_corridaqg lê e grava.</td>
+          </tr>
+          <tr data-busca="sequencia_corridaqg created_at data e hora de criação do registro.">
+            <td class="attr"><code>created_at</code></td>
+            <td>Data e hora de criação do registro.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Nenhum perfil acessa. Só a sp_proximo_corridaqg lê e grava.</td>
+          </tr>
+          <tr data-busca="sequencia_corridaqg updated_at data e hora do último incremento.">
+            <td class="attr"><code>updated_at</code></td>
+            <td>Data e hora do último incremento.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: ON UPDATE CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Nenhum perfil acessa. Só a sp_proximo_corridaqg lê e grava.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tabela" id="tabela_usuario" data-nome="usuario">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>usuario</code></h2>
+            <p class="subtitulo">Usuários</p>
+          </div>
+          <div class="chips">
+            <span class="chip">14 colunas</span>
+            <span class="chip">0 FK</span>
+            <span class="chip">3 CHECK</span>
+            <span class="chip chip-dp">14 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Pessoas que operam o sistema, com perfil de acesso, controle de bloqueio por senha errada e os dados de consentimento e anonimização exigidos pela LGPD.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF14, RF16, RF17, RN15, RN16, RN19, PR02, PR03, PR04</p></div>
+          <div><h3>Relacionamentos</h3><ul><li>Referenciada por <a href="#tabela_movimento">movimento.id_usuario</a></li><li>Referenciada por <a href="#tabela_movimento">movimento.id_usuario_efetivacao</a></li><li>Referenciada por <a href="#tabela_movimento">movimento.id_usuario_estorno</a></li><li>Referenciada por <a href="#tabela_log_auditoria">log_auditoria.id_usuario</a></li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Gestão completa: só ADMIN (GERENCIAR_USUARIOS). Os demais perfis veem apenas o nome de quem registrou, efetivou ou estornou, pela vw_movimento_completo. senha_hash nunca é exibida e não vai para o log. Papéis: internox_app (aplicação), internox_admin (manutenção).</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="usuario id_usuario identificador do usuário. identifica uma pessoa de forma indireta.">
+            <td class="attr"><code>id_usuario</code></td>
+            <td>Identificador do usuário. Identifica uma pessoa de forma indireta.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: movimento.id_usuario, id_usuario_efetivacao, id_usuario_estorno e log_auditoria.id_usuario.</td>
+            <td class="rbac">Lê: só ADMIN. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="usuario nome nome do colaborador. trocado por texto genérico na anonimização (rf16).">
+            <td class="attr"><code>nome</code></td>
+            <td>Nome do colaborador. Trocado por texto genérico na anonimização (RF16).</td>
+            <td class="tipo"><code>VARCHAR(100)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: cadastro pelo ADMIN. Destino: vw_movimento_completo, sp_exportar_dados_usuario e log_auditoria (JSON).</td>
+            <td class="rbac">Lê: ADMIN; os demais perfis veem o nome pela vw_movimento_completo. Grava: só ADMIN.</td>
+          </tr>
+          <tr data-busca="usuario email e-mail corporativo, usado como login. único.">
+            <td class="attr"><code>email</code></td>
+            <td>E-mail corporativo, usado como login. Único.</td>
+            <td class="tipo"><code>VARCHAR(100)</code></td>
+            <td class="cons">NOT NULL<br><strong>[UNIQUE]</strong></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: cadastro pelo ADMIN. Destino: sp_registrar_login, sp_exportar_dados_usuario e log_auditoria (JSON).</td>
+            <td class="rbac">Lê: só ADMIN. Grava: só ADMIN.</td>
+          </tr>
+          <tr data-busca="usuario senha_hash hash da senha. a senha em texto nunca é gravada (pr04, rnf01).">
+            <td class="attr"><code>senha_hash</code></td>
+            <td>Hash da senha. A senha em texto nunca é gravada (PR04, RNF01).</td>
+            <td class="tipo"><code>VARCHAR(255)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: aplicação (hash gerado fora do banco). Destino: só a verificação de login; no log aparece apenas &quot;senha_alterada&quot;.</td>
+            <td class="rbac">Nenhum perfil lê. Grava: aplicação, no cadastro e na troca de senha (ADMIN). Fora do log e da exportação.</td>
+          </tr>
+          <tr data-busca="usuario perfil perfil de acesso: almoxarife, gerente, admin ou auditor. base do fn_pode.">
+            <td class="attr"><code>perfil</code></td>
+            <td>Perfil de acesso: ALMOXARIFE, GERENTE, ADMIN ou AUDITOR. Base do fn_pode.</td>
+            <td class="tipo"><code>ENUM(&#x27;ALMOXARIFE&#x27;,<wbr>&#x27;GERENTE&#x27;,<wbr>&#x27;ADMIN&#x27;,<wbr>&#x27;AUDITOR&#x27;)</code></td>
+            <td class="cons">NOT NULL<br><span class="idx">INDEX idx_usuario_perfil</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: cadastro pelo ADMIN. Destino: fn_pode, sp_exigir_permissao e gatilhos de movimento.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: só ADMIN.</td>
+          </tr>
+          <tr data-busca="usuario ativo usuário habilitado a entrar no sistema.">
+            <td class="attr"><code>ativo</code></td>
+            <td>Usuário habilitado a entrar no sistema.</td>
+            <td class="tipo"><code>BOOLEAN</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT TRUE</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: padrão TRUE; alterado pelo ADMIN. Destino: fn_pode e sp_registrar_login.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: só ADMIN.</td>
+          </tr>
+          <tr data-busca="usuario tentativas_falhas senhas erradas seguidas. ao chegar a 5, o usuário é bloqueado por 15 minutos (rn16).">
+            <td class="attr"><code>tentativas_falhas</code></td>
+            <td>Senhas erradas seguidas. Ao chegar a 5, o usuário é bloqueado por 15 minutos (RN16).</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT 0<br><span class="chk" title="tentativas_falhas &gt;= 0">CHECK chk_usuario_tentativas</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: sp_registrar_login. Destino: bloqueado_ate e log_auditoria (LOGIN_FALHO).</td>
+            <td class="rbac">Lê: só ADMIN. Grava: sp_registrar_login.</td>
+          </tr>
+          <tr data-busca="usuario bloqueado_ate fim do bloqueio temporário de acesso. null quando não há bloqueio.">
+            <td class="attr"><code>bloqueado_ate</code></td>
+            <td>Fim do bloqueio temporário de acesso. NULL quando não há bloqueio.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: sp_registrar_login. Destino: sp_registrar_login.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: sp_registrar_login.</td>
+          </tr>
+          <tr data-busca="usuario anonimizado indica que os dados pessoais já foram anonimizados (rf16).">
+            <td class="attr"><code>anonimizado</code></td>
+            <td>Indica que os dados pessoais já foram anonimizados (RF16).</td>
+            <td class="tipo"><code>BOOLEAN</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT FALSE<br><span class="chk" title="(anonimizado = FALSE) = (data_anonimizacao IS NULL)">CHECK chk_usuario_anonimizacao</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: sp_anonimizar_usuario. Destino: consultas e exportação.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: sp_anonimizar_usuario (ADMIN).</td>
+          </tr>
+          <tr data-busca="usuario data_anonimizacao quando a anonimização ocorreu. preenchida se, e só se, anonimizado for true.">
+            <td class="attr"><code>data_anonimizacao</code></td>
+            <td>Quando a anonimização ocorreu. Preenchida se, e só se, anonimizado for TRUE.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NULL<br><span class="chk" title="(anonimizado = FALSE) = (data_anonimizacao IS NULL)">CHECK chk_usuario_anonimizacao</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: sp_anonimizar_usuario. Destino: auditoria e prestação de contas à ANPD.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: sp_anonimizar_usuario (ADMIN).</td>
+          </tr>
+          <tr data-busca="usuario data_consentimento_lgpd quando o usuário deu o consentimento (rn19). obrigatória se consentimento_ativo for true.">
+            <td class="attr"><code>data_consentimento_lgpd</code></td>
+            <td>Quando o usuário deu o consentimento (RN19). Obrigatória se consentimento_ativo for TRUE.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NULL<br><span class="chk" title="consentimento_ativo = FALSE OR data_consentimento_lgpd IS NOT NULL">CHECK chk_usuario_consentimento</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: aceite do termo na aplicação. Destino: sp_exportar_dados_usuario e auditoria.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: só ADMIN.</td>
+          </tr>
+          <tr data-busca="usuario consentimento_ativo consentimento vigente para o tratamento dos dados pessoais.">
+            <td class="attr"><code>consentimento_ativo</code></td>
+            <td>Consentimento vigente para o tratamento dos dados pessoais.</td>
+            <td class="tipo"><code>BOOLEAN</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT FALSE<br><span class="chk" title="consentimento_ativo = FALSE OR data_consentimento_lgpd IS NOT NULL">CHECK chk_usuario_consentimento</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: aceite ou revogação na aplicação. Destino: sp_exportar_dados_usuario e auditoria.</td>
+            <td class="rbac">Lê: só ADMIN. Grava: só ADMIN.</td>
+          </tr>
+          <tr data-busca="usuario created_at data e hora do cadastro do usuário.">
+            <td class="attr"><code>created_at</code></td>
+            <td>Data e hora do cadastro do usuário.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: auditoria e exportação dos dados.</td>
+            <td class="rbac">Lê: só ADMIN. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="usuario updated_at data e hora da última alteração no cadastro.">
+            <td class="attr"><code>updated_at</code></td>
+            <td>Data e hora da última alteração no cadastro.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: ON UPDATE CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: só ADMIN. Gerado pelo banco.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tabela" id="tabela_peca" data-nome="peca">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>peca</code></h2>
+            <p class="subtitulo">Peças</p>
+          </div>
+          <div class="chips">
+            <span class="chip">16 colunas</span>
+            <span class="chip">2 FK</span>
+            <span class="chip">4 CHECK</span>
+            <span class="chip ">0 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Cada peça em estoque, identificada pelo corridaQG e ligada ao tipo e à corrida de origem. Guarda a especificação técnica e o saldo, que só muda pela efetivação ou pelo estorno de movimentos.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF03, RF08, RF09, RF11, RF18, RN01, RN03 a RN06, RN15</p></div>
+          <div><h3>Relacionamentos</h3><ul><li><code>id_corrida</code> referencia <a href="#tabela_corrida">corrida</a>.id_corrida (ON DELETE RESTRICT ON UPDATE CASCADE)</li><li><code>id_tipo_peca</code> referencia <a href="#tabela_tipo_peca">tipo_peca</a>.id_tipo_peca (ON DELETE RESTRICT ON UPDATE CASCADE)</li><li>Referenciada por <a href="#tabela_movimento">movimento.id_peca</a></li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Leitura: todos os perfis (CONSULTAR). Cadastro e complemento: ALMOXARIFE, GERENTE e ADMIN (CADASTRAR_PECA). O saldo (quantidade) só é alterado por GERENTE e ADMIN, ao efetivar ou estornar movimentos. Papéis: internox_app escreve; internox_relatorio só lê.</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="peca id_peca identificador interno da peça.">
+            <td class="attr"><code>id_peca</code></td>
+            <td>Identificador interno da peça.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: movimento.id_peca.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="peca corridaqg código de rastreabilidade da peça, impresso na etiqueta. único, sequencial e imutável (rn01).">
+            <td class="attr"><code>corridaqg</code></td>
+            <td>Código de rastreabilidade da peça, impresso na etiqueta. Único, sequencial e imutável (RN01).</td>
+            <td class="tipo"><code>BIGINT</code></td>
+            <td class="cons">NOT NULL<br><strong>[UNIQUE]</strong></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: sp_proximo_corridaqg. Destino: etiqueta, coletores, buscar_peca e todas as views.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco; ninguém altera.</td>
+          </tr>
+          <tr data-busca="peca id_corrida corrida de produção de onde a peça saiu.">
+            <td class="attr"><code>id_corrida</code></td>
+            <td>Corrida de produção de onde a peça saiu.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_corrida">corrida.id_corrida</a><br>NOT NULL<br><span class="idx">INDEX idx_peca_corrida</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: corrida.id_corrida, escolhida no cadastro. Destino: rastreio (RF09). Obrigatória (RN03).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca id_tipo_peca tipo da peça.">
+            <td class="attr"><code>id_tipo_peca</code></td>
+            <td>Tipo da peça.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_tipo_peca">tipo_peca.id_tipo_peca</a><br>NOT NULL<br><span class="idx">INDEX idx_peca_tipo</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: tipo_peca.id_tipo_peca. Destino: regra de comprimento e relatórios.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca nome descrição da peça (ex.: flange cego 6 pol. 150#).">
+            <td class="attr"><code>nome</code></td>
+            <td>Descrição da peça (ex.: Flange cego 6 pol. 150#).</td>
+            <td class="tipo"><code>VARCHAR(100)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: cadastro. Destino: buscas e views.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca quantidade saldo em estoque. nasce 0 e só muda pela efetivação ou estorno de movimentos; nunca fica negativo (rn06, rn10).">
+            <td class="attr"><code>quantidade</code></td>
+            <td>Saldo em estoque. Nasce 0 e só muda pela efetivação ou estorno de movimentos; nunca fica negativo (RN06, RN10).</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT 0<br><span class="chk" title="quantidade &gt;= 0">CHECK chk_peca_quantidade</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: sp_efetivar_movimento e sp_estornar_movimento. Destino: vw_estoque_atual e vw_conciliacao_saldo.</td>
+            <td class="rbac">Lê: todos os perfis. Altera: só GERENTE e ADMIN, ao efetivar ou estornar.</td>
+          </tr>
+          <tr data-busca="peca material material do aço (ex.: a105, a234).">
+            <td class="attr"><code>material</code></td>
+            <td>Material do aço (ex.: A105, A234).</td>
+            <td class="tipo"><code>VARCHAR(10)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: certificado de qualidade. Destino: relatório por especificação (RF11).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca diametro diâmetro nominal, sempre maior que zero (rn04).">
+            <td class="attr"><code>diametro</code></td>
+            <td>Diâmetro nominal, sempre maior que zero (RN04).</td>
+            <td class="tipo"><code>DECIMAL(10,2)</code></td>
+            <td class="cons">NOT NULL<br><span class="chk" title="diametro &gt; 0">CHECK chk_peca_diametro</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: especificação técnica. Destino: relatório por especificação.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca schedule schedule (espessura de parede), como sch40 ou sch80. é palavra reservada, por isso fica entre crases.">
+            <td class="attr"><code>schedule</code></td>
+            <td>Schedule (espessura de parede), como SCH40 ou SCH80. É palavra reservada, por isso fica entre crases.</td>
+            <td class="tipo"><code>VARCHAR(10)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: especificação técnica. Destino: relatório por especificação.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca comprimento comprimento, só para tubos. obrigatório na família tubo e proibido em flange e curva (rn05).">
+            <td class="attr"><code>comprimento</code></td>
+            <td>Comprimento, só para tubos. Obrigatório na família TUBO e proibido em FLANGE e CURVA (RN05).</td>
+            <td class="tipo"><code>DECIMAL(10,2)</code></td>
+            <td class="cons">NULL<br><span class="chk" title="comprimento IS NULL OR comprimento &gt; 0">CHECK chk_peca_comprimento</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: cadastro ou sp_completar_peca. Destino: relatório por especificação.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca norma norma técnica (ex.: asme b16.5). opcional.">
+            <td class="attr"><code>norma</code></td>
+            <td>Norma técnica (ex.: ASME B16.5). Opcional.</td>
+            <td class="tipo"><code>VARCHAR(20)</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: certificado de qualidade. Destino: consulta da peça.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca peso peso unitário. opcional, maior que zero quando informado (rn04).">
+            <td class="attr"><code>peso</code></td>
+            <td>Peso unitário. Opcional, maior que zero quando informado (RN04).</td>
+            <td class="tipo"><code>DECIMAL(10,2)</code></td>
+            <td class="cons">NULL<br><span class="chk" title="peso IS NULL OR peso &gt; 0">CHECK chk_peca_peso</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: balança ou especificação. Destino: expedição.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca localizacao endereço físico no almoxarifado (rua, prateleira). opcional.">
+            <td class="attr"><code>localizacao</code></td>
+            <td>Endereço físico no almoxarifado (rua, prateleira). Opcional.</td>
+            <td class="tipo"><code>VARCHAR(100)</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: almoxarife, na sp_cadastrar_peca ou sp_completar_peca. Destino: consultas e coletores (RF13).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca ativo exclusão lógica (rn15).">
+            <td class="attr"><code>ativo</code></td>
+            <td>Exclusão lógica (RN15).</td>
+            <td class="tipo"><code>BOOLEAN</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT TRUE</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: padrão TRUE. Destino: filtros das consultas.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN.</td>
+          </tr>
+          <tr data-busca="peca created_at data e hora do cadastro da peça.">
+            <td class="attr"><code>created_at</code></td>
+            <td>Data e hora do cadastro da peça.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="peca updated_at data e hora da última alteração.">
+            <td class="attr"><code>updated_at</code></td>
+            <td>Data e hora da última alteração.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: ON UPDATE CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tabela" id="tabela_movimento" data-nome="movimento">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>movimento</code></h2>
+            <p class="subtitulo">Movimentos de estoque</p>
+          </div>
+          <div class="chips">
+            <span class="chip">16 colunas</span>
+            <span class="chip">4 FK</span>
+            <span class="chip">3 CHECK</span>
+            <span class="chip chip-dp">3 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Entradas e saídas de peças. Todo movimento nasce PENDENTE, é efetivado por um gerente (só então muda o saldo) e pode ser estornado em até 7 dias. Nunca é apagado.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF04 a RF07, RF12, RF13, RN06 a RN14, RN17, RN18</p></div>
+          <div><h3>Relacionamentos</h3><ul><li><code>id_usuario</code> referencia <a href="#tabela_usuario">usuario</a>.id_usuario (ON DELETE RESTRICT ON UPDATE RESTRICT)</li><li><code>id_peca</code> referencia <a href="#tabela_peca">peca</a>.id_peca (ON DELETE RESTRICT ON UPDATE RESTRICT)</li><li><code>id_usuario_efetivacao</code> referencia <a href="#tabela_usuario">usuario</a>.id_usuario (ON DELETE RESTRICT ON UPDATE RESTRICT)</li><li><code>id_usuario_estorno</code> referencia <a href="#tabela_usuario">usuario</a>.id_usuario (ON DELETE RESTRICT ON UPDATE RESTRICT)</li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Leitura: todos os perfis (CONSULTAR). Registro: ALMOXARIFE, GERENTE e ADMIN (REGISTRAR_MOVIMENTO). Efetivação e estorno: só GERENTE e ADMIN; o ALMOXARIFE registra, mas não efetiva (RN18). DELETE bloqueado por gatilho para todos.</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="movimento id_movimento identificador do movimento.">
+            <td class="attr"><code>id_movimento</code></td>
+            <td>Identificador do movimento.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: log_auditoria.id_registro_afetado e vw_movimento_completo.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="movimento tipo entrada soma ao saldo; saida subtrai.">
+            <td class="attr"><code>tipo</code></td>
+            <td>ENTRADA soma ao saldo; SAIDA subtrai.</td>
+            <td class="tipo"><code>ENUM(&#x27;ENTRADA&#x27;,<wbr>&#x27;SAIDA&#x27;)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: registro do movimento. Destino: cálculo do saldo e fn_saldo_calculado.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN, só enquanto PENDENTE.</td>
+          </tr>
+          <tr data-busca="movimento motivo motivo de negócio do movimento (produção, expedição, devolução, ajuste de inventário ou outro).">
+            <td class="attr"><code>motivo</code></td>
+            <td>Motivo de negócio do movimento (produção, expedição, devolução, ajuste de inventário ou outro).</td>
+            <td class="tipo"><code>ENUM(&#x27;PRODUCAO&#x27;,<wbr>&#x27;EXPEDICAO&#x27;,<wbr>&#x27;DEVOLUCAO&#x27;,<wbr>&#x27;AJUSTE_INVENTARIO&#x27;,<wbr>&#x27;OUTRO&#x27;)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: registro do movimento. Destino: relatórios de giro (RF12).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN, só enquanto PENDENTE.</td>
+          </tr>
+          <tr data-busca="movimento situacao ciclo de vida: pendente, efetivado ou estornado. só muda pelas procedures autorizadas (rn07, rn13).">
+            <td class="attr"><code>situacao</code></td>
+            <td>Ciclo de vida: PENDENTE, EFETIVADO ou ESTORNADO. Só muda pelas procedures autorizadas (RN07, RN13).</td>
+            <td class="tipo"><code>ENUM(&#x27;PENDENTE&#x27;,<wbr>&#x27;EFETIVADO&#x27;,<wbr>&#x27;ESTORNADO&#x27;)</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT &#x27;PENDENTE&#x27;<br><span class="idx">INDEX idx_movimento_situacao</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: padrão PENDENTE; sp_efetivar_movimento e sp_estornar_movimento. Destino: saldo e vw_conciliacao_saldo.</td>
+            <td class="rbac">Lê: todos os perfis. Altera: só GERENTE e ADMIN, ao efetivar ou estornar.</td>
+          </tr>
+          <tr data-busca="movimento quantidade quantidade movimentada, sempre maior que zero.">
+            <td class="attr"><code>quantidade</code></td>
+            <td>Quantidade movimentada, sempre maior que zero.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons">NOT NULL<br><span class="chk" title="quantidade &gt; 0">CHECK chk_movimento_quantidade</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: registro do movimento. Destino: peca.quantidade, após a efetivação.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN, só enquanto PENDENTE.</td>
+          </tr>
+          <tr data-busca="movimento data_movimento data em que o movimento ocorreu. não pode ser futura (rn17).">
+            <td class="attr"><code>data_movimento</code></td>
+            <td>Data em que o movimento ocorreu. Não pode ser futura (RN17).</td>
+            <td class="tipo"><code>DATE</code></td>
+            <td class="cons">NOT NULL<br><span class="idx">INDEX idx_movimento_data</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: registro do movimento. Destino: relatórios por período.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN, só enquanto PENDENTE.</td>
+          </tr>
+          <tr data-busca="movimento observacao observação livre. não deve conter dados pessoais.">
+            <td class="attr"><code>observacao</code></td>
+            <td>Observação livre. Não deve conter dados pessoais.</td>
+            <td class="tipo"><code>VARCHAR(200)</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: registro do movimento. Destino: vw_movimento_completo.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN, só enquanto PENDENTE.</td>
+          </tr>
+          <tr data-busca="movimento id_usuario usuário que registrou o movimento. imutável.">
+            <td class="attr"><code>id_usuario</code></td>
+            <td>Usuário que registrou o movimento. Imutável.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_usuario">usuario.id_usuario</a><br>NOT NULL<br><span class="idx">INDEX idx_movimento_usuario</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: usuário logado (@id_usuario_app). Destino: vw_movimento_completo (registrado_por).</td>
+            <td class="rbac">Lê: todos os perfis. Gravado pelo banco com o usuário logado; imutável.</td>
+          </tr>
+          <tr data-busca="movimento id_peca peça movimentada. imutável depois do registro.">
+            <td class="attr"><code>id_peca</code></td>
+            <td>Peça movimentada. Imutável depois do registro.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_peca">peca.id_peca</a><br>NOT NULL<br><span class="idx">INDEX idx_movimento_peca</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: peca.id_peca. Destino: saldo da peça.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: ALMOXARIFE, GERENTE e ADMIN, só enquanto PENDENTE.</td>
+          </tr>
+          <tr data-busca="movimento data_efetivacao quando o movimento foi efetivado. preenchida junto com id_usuario_efetivacao.">
+            <td class="attr"><code>data_efetivacao</code></td>
+            <td>Quando o movimento foi efetivado. Preenchida junto com id_usuario_efetivacao.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NULL<br><span class="chk" title="(data_efetivacao IS NULL) = (id_usuario_efetivacao IS NULL)">CHECK chk_movimento_efetivacao</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: sp_efetivar_movimento. Destino: prazo de 7 dias para estorno e vw_movimento_completo.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN, ao efetivar.</td>
+          </tr>
+          <tr data-busca="movimento id_usuario_efetivacao gerente ou administrador que efetivou (rn18).">
+            <td class="attr"><code>id_usuario_efetivacao</code></td>
+            <td>Gerente ou administrador que efetivou (RN18).</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_usuario">usuario.id_usuario</a><br>NULL<br><span class="chk" title="(data_efetivacao IS NULL) = (id_usuario_efetivacao IS NULL)">CHECK chk_movimento_efetivacao</span><br><span class="idx">INDEX idx_movimento_usuario_efetivacao</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: sp_efetivar_movimento. Destino: vw_movimento_completo (efetivado_por).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN, ao efetivar.</td>
+          </tr>
+          <tr data-busca="movimento data_estorno quando o movimento foi estornado. preenchida junto com o usuário e o motivo do estorno.">
+            <td class="attr"><code>data_estorno</code></td>
+            <td>Quando o movimento foi estornado. Preenchida junto com o usuário e o motivo do estorno.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NULL<br><span class="chk" title="(data_estorno IS NULL) = (id_usuario_estorno IS NULL) AND (data_estorno IS NULL) = (motivo_estorno IS NULL)">CHECK chk_movimento_estorno</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: sp_estornar_movimento. Destino: vw_movimento_completo.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN, ao estornar.</td>
+          </tr>
+          <tr data-busca="movimento id_usuario_estorno gerente ou administrador que estornou.">
+            <td class="attr"><code>id_usuario_estorno</code></td>
+            <td>Gerente ou administrador que estornou.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_usuario">usuario.id_usuario</a><br>NULL<br><span class="chk" title="(data_estorno IS NULL) = (id_usuario_estorno IS NULL) AND (data_estorno IS NULL) = (motivo_estorno IS NULL)">CHECK chk_movimento_estorno</span><br><span class="idx">INDEX idx_movimento_usuario_estorno</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: sp_estornar_movimento. Destino: vw_movimento_completo (estornado_por).</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN, ao estornar.</td>
+          </tr>
+          <tr data-busca="movimento motivo_estorno justificativa do estorno. obrigatória junto com a data e o usuário do estorno.">
+            <td class="attr"><code>motivo_estorno</code></td>
+            <td>Justificativa do estorno. Obrigatória junto com a data e o usuário do estorno.</td>
+            <td class="tipo"><code>VARCHAR(200)</code></td>
+            <td class="cons">NULL<br><span class="chk" title="(data_estorno IS NULL) = (id_usuario_estorno IS NULL) AND (data_estorno IS NULL) = (motivo_estorno IS NULL)">CHECK chk_movimento_estorno</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: sp_estornar_movimento. Destino: vw_movimento_completo e auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Grava: GERENTE e ADMIN, ao estornar.</td>
+          </tr>
+          <tr data-busca="movimento created_at data e hora em que o movimento foi registrado no sistema.">
+            <td class="attr"><code>created_at</code></td>
+            <td>Data e hora em que o movimento foi registrado no sistema.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: vw_movimento_completo (registrado_em).</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="movimento updated_at data e hora da última alteração.">
+            <td class="attr"><code>updated_at</code></td>
+            <td>Data e hora da última alteração.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: ON UPDATE CURRENT_TIMESTAMP. Destino: auditoria.</td>
+            <td class="rbac">Lê: todos os perfis. Gerado pelo banco.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tabela" id="tabela_log_auditoria" data-nome="log_auditoria">
+        <header class="tabela-cab">
+          <div>
+            <h2><code>log_auditoria</code></h2>
+            <p class="subtitulo">Log de auditoria</p>
+          </div>
+          <div class="chips">
+            <span class="chip">9 colunas</span>
+            <span class="chip">1 FK</span>
+            <span class="chip">0 CHECK</span>
+            <span class="chip chip-dp">3 com dado pessoal</span>
+          </div>
+        </header>
+        <p class="finalidade"><strong>Finalidade.</strong> Trilha imutável de todas as inclusões, alterações e exclusões nas tabelas de negócio e das tentativas de login com falha, com o antes e o depois em JSON.</p>
+        <div class="meta-grid">
+          <div><h3>Rastreabilidade</h3><p>RF15, RN14, RNF02, PR01, PR03</p></div>
+          <div><h3>Relacionamentos</h3><ul><li><code>id_usuario</code> referencia <a href="#tabela_usuario">usuario</a>.id_usuario (ON DELETE RESTRICT ON UPDATE RESTRICT)</li></ul></div>
+          <div><h3>Controle de acesso (RBAC)</h3><p>Leitura: ADMIN e AUDITOR (VER_AUDITORIA). Escrita: só os 14 gatilhos AFTER e a sp_registrar_login. UPDATE e DELETE bloqueados por gatilho para todos, inclusive internox_admin.</p></div>
+        </div>
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr><th>Atributo</th><th>Descrição / Regra de negócio</th><th>Tipo e tamanho</th><th>Constraints</th><th>Privacidade (LGPD)</th><th>Linhagem</th><th>Controle de acesso (RBAC)</th></tr>
+            </thead>
+            <tbody>
+          <tr data-busca="log_auditoria id_log identificador do registro de log. bigint pelo alto volume.">
+            <td class="attr"><code>id_log</code></td>
+            <td>Identificador do registro de log. BIGINT pelo alto volume.</td>
+            <td class="tipo"><code>BIGINT</code></td>
+            <td class="cons"><strong>[PK]</strong><br>NOT NULL<br>AUTO_INCREMENT</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: AUTO_INCREMENT. Destino: consulta de auditoria (RF15).</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="log_auditoria tabela_afetada nome da tabela onde a operação ocorreu.">
+            <td class="attr"><code>tabela_afetada</code></td>
+            <td>Nome da tabela onde a operação ocorreu.</td>
+            <td class="tipo"><code>VARCHAR(50)</code></td>
+            <td class="cons">NOT NULL<br><span class="idx">INDEX idx_log_tabela_registro</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: gatilhos de auditoria. Destino: consulta de auditoria.</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+          <tr data-busca="log_auditoria id_registro_afetado chave do registro alterado. null em login_falho de e-mail inexistente.">
+            <td class="attr"><code>id_registro_afetado</code></td>
+            <td>Chave do registro alterado. NULL em LOGIN_FALHO de e-mail inexistente.</td>
+            <td class="tipo"><code>BIGINT</code></td>
+            <td class="cons">NULL<br><span class="idx">INDEX idx_log_tabela_registro</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: gatilhos de auditoria. Destino: histórico de um registro.</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+          <tr data-busca="log_auditoria operacao insert, update, delete ou login_falho.">
+            <td class="attr"><code>operacao</code></td>
+            <td>INSERT, UPDATE, DELETE ou LOGIN_FALHO.</td>
+            <td class="tipo"><code>ENUM(&#x27;INSERT&#x27;,<wbr>&#x27;UPDATE&#x27;,<wbr>&#x27;DELETE&#x27;,<wbr>&#x27;LOGIN_FALHO&#x27;)</code></td>
+            <td class="cons">NOT NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: gatilhos de auditoria e sp_registrar_login. Destino: consulta de auditoria.</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+          <tr data-busca="log_auditoria motivo texto complementar (ex.: motivo do estorno ou da falha de login).">
+            <td class="attr"><code>motivo</code></td>
+            <td>Texto complementar (ex.: motivo do estorno ou da falha de login).</td>
+            <td class="tipo"><code>VARCHAR(200)</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: gatilhos e procedures. Destino: consulta de auditoria.</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+          <tr data-busca="log_auditoria id_usuario usuário que executou a operação. null quando a operação não tem usuário da aplicação.">
+            <td class="attr"><code>id_usuario</code></td>
+            <td>Usuário que executou a operação. NULL quando a operação não tem usuário da aplicação.</td>
+            <td class="tipo"><code>INT</code></td>
+            <td class="cons"><strong>[FK]</strong> <a class="ref" href="#tabela_usuario">usuario.id_usuario</a><br>NULL<br><span class="idx">INDEX idx_log_usuario</span></td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: @id_usuario_app. Destino: consulta de auditoria.</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+          <tr data-busca="log_auditoria data_hora momento da operação.">
+            <td class="attr"><code>data_hora</code></td>
+            <td>Momento da operação.</td>
+            <td class="tipo"><code>DATETIME</code></td>
+            <td class="cons">NOT NULL<br>DEFAULT CURRENT_TIMESTAMP<br><span class="idx">INDEX idx_log_data_hora</span></td>
+            <td><span class="badge na" title="Não aplicável">[N/A]</span></td>
+            <td class="lin">Origem: CURRENT_TIMESTAMP. Destino: consulta de auditoria por período.</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Gerado pelo banco.</td>
+          </tr>
+          <tr data-busca="log_auditoria valor_anterior estado do registro antes da operação, em json. em usuario pode conter nome e e-mail; nunca contém senha_hash.">
+            <td class="attr"><code>valor_anterior</code></td>
+            <td>Estado do registro antes da operação, em JSON. Em usuario pode conter nome e e-mail; nunca contém senha_hash.</td>
+            <td class="tipo"><code>JSON</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: OLD.* nos gatilhos. Destino: auditoria e prestação de contas (LGPD).</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+          <tr data-busca="log_auditoria valor_novo estado do registro depois da operação, em json. mesma regra de valor_anterior.">
+            <td class="attr"><code>valor_novo</code></td>
+            <td>Estado do registro depois da operação, em JSON. Mesma regra de valor_anterior.</td>
+            <td class="tipo"><code>JSON</code></td>
+            <td class="cons">NULL</td>
+            <td><span class="badge dp" title="Dado pessoal">[DP]</span></td>
+            <td class="lin">Origem: NEW.* nos gatilhos. Destino: auditoria e prestação de contas (LGPD).</td>
+            <td class="rbac">Lê: ADMIN e AUDITOR. Grava: só os gatilhos e a sp_registrar_login; nunca alterado.</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="cartao" id="objetos">
+        <h2>Views, procedures e gatilhos</h2>
+        <p>As regras de negócio ficam no próprio banco. A aplicação usa as procedures e as views abaixo, e os gatilhos garantem as regras mesmo contra escrita direta nas tabelas.</p>
+        <div class="obj-grid">
+          <div>
+            <h3>Views</h3>
+            <ul>
+              <li><code>vw_estoque_atual</code>: saldo por peça, com família e tipo.</li>
+              <li><code>vw_peca_completa</code>: peça com tipo e corrida de origem.</li>
+              <li><code>vw_movimento_completo</code>: movimento com quem registrou, efetivou e estornou.</li>
+              <li><code>vw_conciliacao_saldo</code>: peças cujo saldo difere da soma dos movimentos (deve ficar vazia).</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Procedures e funções</h3>
+            <ul>
+              <li><code>fn_pode</code>, <code>sp_exigir_permissao</code>: controle de acesso por perfil.</li>
+              <li><code>sp_registrar_login</code>: tentativas e bloqueio de acesso.</li>
+              <li><code>sp_cadastrar_tipo_peca</code>, <code>sp_cadastrar_corrida</code>, <code>sp_cadastrar_peca</code>, <code>sp_completar_peca</code>, <code>sp_proximo_corridaqg</code>.</li>
+              <li><code>sp_efetivar_movimento</code>, <code>sp_estornar_movimento</code>, <code>fn_saldo_calculado</code>.</li>
+              <li><code>sp_anonimizar_usuario</code>, <code>sp_exportar_dados_usuario</code>: direitos do titular (LGPD).</li>
+              <li><code>buscar_peca</code>, <code>buscar</code>: pesquisa por nome, corridaQG, tipo e corrida.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Gatilhos</h3>
+            <ul>
+              <li>Regra: <code>trg_peca_bi</code>, <code>trg_peca_bu</code>, <code>trg_movimento_bi</code>, <code>trg_movimento_bu</code>, <code>trg_movimento_bd</code>, <code>trg_log_auditoria_bu</code>, <code>trg_log_auditoria_bd</code>.</li>
+              <li>Auditoria (14 gatilhos AFTER): inclusão, alteração e exclusão em <code>tipo_peca</code>, <code>corrida</code>, <code>peca</code> e <code>usuario</code>; inclusão e alteração em <code>movimento</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="rodape">
+        Dicionário de dados v2.2 &middot; Internox Aços e Tubos Ltda. &middot; UNICID, Grupo 04 &middot; 2026
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal" id="modalDer" role="dialog" aria-modal="true" aria-labelledby="tituloDer" hidden>
+    <div class="modal-topo">
+      <h2 id="tituloDer">Diagrama Entidade-Relacionamento</h2>
+      <div class="modal-ctrl">
+        <button class="btn-zoom" id="zoomMais" type="button" aria-label="Aumentar zoom">+</button>
+        <button class="btn-zoom" id="zoomMenos" type="button" aria-label="Diminuir zoom">&minus;</button>
+        <button class="btn-zoom btn-reset" id="zoomReset" type="button">Reset</button>
+        <button class="btn-zoom btn-fechar" id="fecharDer" type="button" aria-label="Fechar">&times;</button>
+      </div>
+    </div>
+    <div class="modal-palco" id="palcoDer">
+      <img id="imgDer" src="assets/der.png" alt="Diagrama entidade-relacionamento do banco estoque_pecas" draggable="false">
+    </div>
+    <p class="modal-dica">Role o mouse para dar zoom e arraste para mover. No celular, use dois dedos.</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
